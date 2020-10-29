@@ -19,22 +19,6 @@ public class NumberModel {
 		views = v;
 	}
 	
-	// TODO: Observer pattern with views
-	public void update(String[] values) {
-		// Parse through the input
-		for(int i = 0; i < values.length; i++) {
-			try {
-				fields[i] = Integer.parseInt(values[i]);
-			} catch(NumberFormatException e) {
-				fields[i] = 0;
-			}
-		}
-		// Update the views
-		for(View v: views) {
-			v.update(fields);
-		}
-	}
-	
 	// We only care about updating values, so we have a quick function for it
 	public void update(int[] values){
 		// Parse through the strings here instead of NumberView

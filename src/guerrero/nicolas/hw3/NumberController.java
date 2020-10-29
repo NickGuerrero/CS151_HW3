@@ -18,20 +18,21 @@ public class NumberController {
 	}
 	
 	public void run() {
-		numView.display();
 		barView.display();
+		numView.display();
 	}
 	
 	public void updateModel(String[] input) {
+		Double carry;
 		int[] fields = new int[input.length];
 		for(int i = 0; i < input.length; i++) {
 			try {
-				fields[i] = Integer.parseInt(input[i]);
+				carry = Double.valueOf(input[i]);
+				fields[i] = carry.intValue();
 			} catch(NumberFormatException e) {
 				fields[i] = 0;
 			}
 		}
-		numView.update(fields);
-		barView.update(fields);
+		model.update(fields);
 	}
 }

@@ -23,36 +23,6 @@ public class NumberView implements View {
 	private NumberController controller;
 	
 	// Construct NumberView
-	public NumberView(int size) {
-		// Frame operations
-		frame = new JFrame("Number View");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		
-		// Set title
-		JLabel title = new JLabel("Change numbers to edit the graph");
-		title.setFont(title.getFont().deriveFont(16.0f));
-		JPanel center = new JPanel(new FlowLayout());
-		center.add(title);
-		frame.add(center);
-		
-		// Add the text fields
-		fields = new NumberEntry[size];
-		for(int i = 0; i < size; i++) {
-			fields[i] = new NumberEntry(i + 1);
-			frame.add(fields[i].entry);
-		}
-		
-		// Add the update button
-		updateButton = new JButton("Update");
-		// updateButton.addActionListener(event -> updateButton.setBackground(Color.WHITE));
-		updateButton.addActionListener(event -> updateModel());
-		center = new JPanel(new FlowLayout());
-		center.add(updateButton);
-		frame.add(center);
-	}
-	
-	// Construct NumberView
 	public NumberView(String[] colors, NumberController c) {
 		// Set controller
 		controller = c;
@@ -78,8 +48,7 @@ public class NumberView implements View {
 		
 		// Add the update button
 		updateButton = new JButton("Update");
-		// updateButton.addActionListener(event -> updateButton.setBackground(Color.WHITE));
-		updateButton.addActionListener(event -> updateModel());
+		updateButton.addActionListener(event -> updateController());
 		center = new JPanel(new FlowLayout());
 		center.add(updateButton);
 		frame.add(center);
@@ -93,7 +62,7 @@ public class NumberView implements View {
 	}
 	
 	// Update NumberModel
-	public void updateModel() {
+	public void updateController() {
 		String[] input = new String[fields.length];
 		for(int i = 0; i < fields.length; i++) {
 			input[i] = fields[i].numInput.getText();
@@ -104,7 +73,7 @@ public class NumberView implements View {
 	// Display NumberView
 	public void display() {
 		frame.setLocationRelativeTo(null);
-		frame.setPreferredSize(new Dimension(300, 300));
+		frame.setPreferredSize(new Dimension(FRAMEWIDTH, FRAMEHEIGHT));
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -136,17 +105,6 @@ public class NumberView implements View {
 		
 		public void updateText(int i) {
 			numInput.setText(Integer.toString(i));
-		}
-		
-		public int getText() {
-			int newNum;
-			String input = this.numInput.getText();
-			try {
-				newNum = Integer.parseInt(input); 
-			} catch(NumberFormatException e) {
-				newNum = 0;
-			}
-			return newNum;
 		}
 	}
 
