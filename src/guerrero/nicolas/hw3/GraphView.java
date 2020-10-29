@@ -1,8 +1,6 @@
 package guerrero.nicolas.hw3;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-
 import javax.swing.*;
 
 /**
@@ -13,111 +11,78 @@ import javax.swing.*;
  * @author Guerr
  *
  */
-public class GraphView {
+public class GraphView implements View {
 	private JFrame frame;
-	//private int width;
-	//private int height;
+	private JPanel barWindow;
+	private NumberModel numbers;
+	private GridBagLayout layout;
 	
-	public GraphView() {
+	private final int WIDTH = 40;
+	private BarGraphComponent[] bars;
+	
+	public GraphView(NumberModel n) {		
+		// Set up the frame
 		frame = new JFrame("Graph View");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
-		//frame.getContentPane().setLayout(new FlowLayout());
-		//frame.getContentPane().getLayout().setAlignmentX(Component.BOTTOM_ALIGNMENT);
-
-		//frame.setLayout(new FlowLayout());
 		
-		JPanel barWindow = new JPanel();
+		// Set up the panel
+		barWindow = new JPanel();
 		barWindow.setBackground(Color.WHITE);
-		//BoxLayout layout = new BoxLayout(barWindow, BoxLayout.X_AXIS);
-		GridBagLayout layout = new GridBagLayout();
-		GridBagConstraints con = new GridBagConstraints();
+		layout = new GridBagLayout();
 		barWindow.setLayout(layout);
 		
-		// Second argument must be dynamic on max
-		BarGraphComponent[] sample = {
-				new BarGraphComponent(0, 0, 40, 100, Color.BLUE),
-				new BarGraphComponent(0, 0, 40, 50, Color.RED),
-				new BarGraphComponent(0, 0, 40, 150, Color.GREEN)
-		};
+		// Retrieve numbers
+		numbers = n;
+		bars = new BarGraphComponent[numbers.fields.length];
+		for(int i = 0; i < numbers.fields.length; i++) {
+			bars[i] = new BarGraphComponent(0, 0, WIDTH, numbers.fields[i], numbers.colors[i]);
+		}
 		
-		for(int i = 0; i < sample.length; i++) {
-			JComponent current = (JComponent) sample[i];
+		// Place bars into the GridBag
+		for(int i = 0; i < bars.length; i++) {
+			JComponent current = (JComponent) bars[i];
 			current.setAlignmentY(JComponent.BOTTOM_ALIGNMENT);
-			
-			con.fill = GridBagConstraints.HORIZONTAL;
-			con.gridx = i;
-			con.gridy = 0;
-			con.weightx = 1;
-			con.weighty = 1;
-			con.ipady = sample[i].height;
-			con.insets = new Insets(0,30,5,0);
-			con.anchor = GridBagConstraints.PAGE_END;
-			
-			barWindow.add(current, con);;
-			//barWindow.add(current, BorderLayout.SOUTH);
+			barWindow.add(current, buildConstraint(i, bars[i].height));
 		}
-		
-		frame.add(barWindow); //, BorderLayout.SOUTH);
-		
-		/**
-		JPanel temp;
-		for(BarGraphComponent sus: sample) {
-			temp = new JPanel();
-			temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
-			//temp.setLayout(new BorderLayout());
-			temp.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-			sus.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-			temp.add(sus);
-			frame.add(temp);
+		frame.add(barWindow);
+	}
+	
+	public void update(int[] values) {
+		for(int i = 0; i < bars.length; i++) {
+			bars[i].updateHeight(values[i]);
+			layout.setConstraints(bars[i], buildConstraint(i, bars[i].height));
+			bars[i].validate();
+			bars[i].repaint();
 		}
-		**/
-		
-		//frame.add(barWindow);
-		
-		//frame.add(sample[0]);
-		//frame.add(sample[1]);
-		//frame.add(sample[2]);
-		//frame.add(sample[3]);
-		//frame.add(barWindow);
-		
-		/**
-		JLabel sep = new JLabel(new BarIcon(40, 120, 1));
-		sep.setVerticalAlignment(SwingConstants.BOTTOM);
-		JLabel ses = new JLabel(new BarIcon(40, 30, 1));
-		ses.setVerticalAlignment(SwingConstants.BOTTOM);
-		JLabel set = new JLabel(new BarIcon(40, 40, 1));
-		set.setVerticalAlignment(SwingConstants.BOTTOM);
-		
-		JPanel bep = new JPanel();
-		bep.setAlignmentY(Component.TOP_ALIGNMENT);
-		JPanel bes = new JPanel();
-		bes.setAlignmentY(Component.TOP_ALIGNMENT);
-		JPanel bet = new JPanel();
-		bet.setAlignmentY(Component.TOP_ALIGNMENT);
-		
-		bep.add(sep);
-		bes.add(ses);
-		bet.add(set);
-		
-		frame.add(new JLabel(new BarIcon()));
-		frame.add(bep);
-		frame.add(bes);
-		frame.add(bet);
-		//frame.add(quick);
-		 * **/
+		barWindow.revalidate();
+		barWindow.repaint();
+	}
+	
+	// Constraint reference
+	private GridBagConstraints buildConstraint(int index, int height) {
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = index;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.ipady = height;
+		c.insets = new Insets(0,30,5,0);
+		c.anchor = GridBagConstraints.PAGE_END;
+		return c;
 	}
 	
 	// Display GraphView
 	public void display() {
 		frame.setLocationRelativeTo(null);
-		frame.setPreferredSize(new Dimension(300, 300));
+		frame.setPreferredSize(new Dimension(FRAMEWIDTH, FRAMEHEIGHT));
 		frame.pack();
 		frame.setVisible(true);
 	}
 	
 	@SuppressWarnings("serial")
-	protected class BarGraphComponent extends JComponent {
+	private class BarGraphComponent extends JComponent {
 		private int x;
 		private int y;
 		private int width;
@@ -144,42 +109,6 @@ public class GraphView {
 				height = 0;
 			}
 			column.fillRect(x, y, width, height);
-		}
-	}
-
-	protected class BarIcon implements Icon {
-		protected int width;
-		protected int height;
-		protected int spacing;
-		protected Color color;
-		
-		public BarIcon() {
-			width = 60;
-			height = 100;
-			spacing = 20;
-			color = Color.blue;
-		}
-		
-		public BarIcon(int width, int height, int separator) {
-			this.width = width;
-			this.height = height;
-			this.spacing = separator;
-			color = Color.red;
-		}
-		
-		public int getIconWidth() {
-			return width;
-		}
-		
-		public int getIconHeight() {
-			return height;
-		}
-		
-		public void paintIcon(Component c, Graphics g, int x, int y) {
-			Graphics2D g2 = (Graphics2D) g;
-			Rectangle2D.Double rect = new Rectangle.Double(x + spacing, y, width, height);
-			g2.setColor(color);
-			g2.fill(rect);
 		}
 	}
 }
