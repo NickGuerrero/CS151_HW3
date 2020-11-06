@@ -22,21 +22,25 @@ public class FilterTest {
 		int[] positiveOnly = filter(testIntegers, posiOnly);
 		
 		// Test Results
+		System.out.print("Original Integer Array: ");
 		for(int i: testIntegers) {
 			System.out.print(i);
 			System.out.print(" ");
 		}
 		System.out.println("");
+		System.out.print("Filtered Integer Array: ");
 		for(int i: positiveOnly) {
 			System.out.print(i);
 			System.out.print(" ");
 		}
 		System.out.println("");
+		System.out.print("Original String Array: ");
 		for(String s: testStrings) {
 			System.out.print(s);
 			System.out.print(" ");
 		}
 		System.out.println("");
+		System.out.print("Filtered String Array: ");
 		for(String s: longStrings) {
 			System.out.print(s);
 			System.out.print(" ");
