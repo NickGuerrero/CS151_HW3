@@ -4,13 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
- * 
- * Project Specifications
- * 3 rectangles with numbers & different colors next to each to make a bar graph
- * 
- * @author Guerr
- *
+ * Displays the bar graph as specified from NumberModel. Whenever NumberModel
+ * is updated, this will be updated as well.
+ * @author Nicolas Guerrero
  */
+
 public class GraphView implements View {
 	private JFrame frame;
 	private JPanel barWindow;
@@ -18,6 +16,7 @@ public class GraphView implements View {
 	private GridBagLayout layout;
 	
 	private final int WIDTH = 40;
+	private final int SCALE = 10;
 	private BarGraphComponent[] bars;
 	
 	public GraphView(NumberModel n) {		
@@ -48,6 +47,7 @@ public class GraphView implements View {
 		frame.add(barWindow);
 	}
 	
+	// Update is called from Model
 	public void update(int[] values) {
 		for(int i = 0; i < bars.length; i++) {
 			bars[i].updateHeight(values[i]);
@@ -81,6 +81,11 @@ public class GraphView implements View {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Internal class for drawing the bars
+	 * Each BarGraphComponent builds, contains, and arranges the bar drawing.
+	 * Contains an update function for updating on request
+	 */
 	@SuppressWarnings("serial")
 	private class BarGraphComponent extends JComponent {
 		private int x;
@@ -97,10 +102,12 @@ public class GraphView implements View {
 			this.col = col;
 		}
 		
+		// Called from the update function of GraphView
 		public void updateHeight(int h) {
-			this.height = h;
+			this.height = h * SCALE;
 		}
 		
+		@Override
 		public void paint(Graphics g) {
 			Graphics2D column = (Graphics2D) g;
 			if(col != null) {

@@ -1,17 +1,27 @@
 package guerrero.nicolas.hw3;
 
+/**
+ * Exercise 1
+ * Simple implementation of lambda filters, followed by test cases to
+ * prove that the filters work. Similar to the way lambdas were supplied
+ * in the examples.
+ * @author Nicolas Guerrero
+ */
 public class FilterTest {
 	public static void main(String[] args) {
+		// Lambda Filters
 		Filter<String> nineMin = (String s) -> s.length() >= 9;
 		Filter<Integer> posiOnly = (Integer i) -> i >= 0;
 		
-		// Short tests
+		// Short test cases
 		String[] testStrings = {"abc", "1234", "alphabet_soup", "exactly_9"};
 		int[] testIntegers = {0, -1, 2, -3, 4, -5, 6, -7, -0};
 		
+		// Performing the tests
 		String[] longStrings = filter(testStrings, nineMin);
 		int[] positiveOnly = filter(testIntegers, posiOnly);
 		
+		// Test Results
 		for(int i: testIntegers) {
 			System.out.print(i);
 			System.out.print(" ");
