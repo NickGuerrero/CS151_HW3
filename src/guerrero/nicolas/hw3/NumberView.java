@@ -4,17 +4,14 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
+ * Creates the input window for the NumberApplication
+ * This input window is used to update the sibling GraphView on what numbers to show.
+ * Only integer values are accepted, just to keep the problem simple.
  * 
- * Project Specifications
- * 3 labels
- * 3 text fields with numbers
- * Update button
- * 
- * Sources:
+ * Sources: JavaDoc
  * https://stackoverflow.com/questions/17884843/change-jlabel-font-size/17884919
  * 
- * @author Guerr
- *
+ * @author Nicolas Guerrero
  */
 public class NumberView implements View {
 	private JFrame frame;
@@ -54,14 +51,14 @@ public class NumberView implements View {
 		frame.add(center);
 	}
 	
-	// Update NumberView
+	// Update NumberView, called by NumberModel after update
 	public void update(int[] values) {
 		for(int i = 0; i < values.length; i++) {
 			fields[i].numInput.setText(Integer.toString(values[i]));
 		}
 	}
 	
-	// Update NumberModel
+	// Update NumberModel, called by NumberView to update
 	public void updateController() {
 		String[] input = new String[fields.length];
 		for(int i = 0; i < fields.length; i++) {
@@ -70,7 +67,7 @@ public class NumberView implements View {
 		controller.updateModel(input);
 	}
 	
-	// Display NumberView
+	// Display NumberView, called by NumberApplication
 	public void display() {
 		frame.setLocationRelativeTo(null);
 		frame.setPreferredSize(new Dimension(FRAMEWIDTH, FRAMEHEIGHT));
@@ -78,11 +75,18 @@ public class NumberView implements View {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Internal class for setting up number input templates
+	 * Each NumberEntry builds and contains JPanel objects with the
+	 * text field and label. Also contains the update function for
+	 * manipulating the object. Allows for quick templates.
+	 */
 	protected class NumberEntry {
 		JPanel entry;
 		JLabel numLabel;
 		JTextField numInput;
 		
+		// Older constructor: Label the fields by number
 		public NumberEntry(int i) {
 			numInput = new JTextField("0", 20);
 			numLabel = new JLabel("Field " + Integer.toString(i) + ": ");
@@ -93,6 +97,7 @@ public class NumberView implements View {
 			entry.add(numInput);
 		}
 		
+		// Current constructor: Label the fields by the given string
 		public NumberEntry(String c) {
 			numInput = new JTextField("0", 20);
 			numLabel = new JLabel(c + ": ");
@@ -103,6 +108,7 @@ public class NumberView implements View {
 			entry.add(numInput);
 		}
 		
+		// Update text, called when the model updates the view
 		public void updateText(int i) {
 			numInput.setText(Integer.toString(i));
 		}

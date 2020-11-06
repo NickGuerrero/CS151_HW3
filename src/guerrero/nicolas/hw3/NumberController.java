@@ -2,6 +2,13 @@ package guerrero.nicolas.hw3;
 
 import java.awt.Color;
 
+/**
+ * Controller that organizes the flow of the application.
+ * Holds and creates the views and models, and receives the input from NumberView
+ * to filter them into GraphView.
+ * @author Nicolas Guerrero
+ */
+
 public class NumberController {
 	private NumberModel model;
 	private NumberView numView;

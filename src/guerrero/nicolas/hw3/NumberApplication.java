@@ -3,11 +3,11 @@ package guerrero.nicolas.hw3;
 import java.awt.Color;
 
 /**
- * 
- * Project Specifications
- * 
- * @author Guerr
- *
+ * Exercise 2
+ * Launch the bar graph application, which works over two windows. It creates the controller,
+ * which then creates the two windows. The input window updates the output graph when the
+ * submit button is clicked. This number is scaled by a factor available in GraphView.
+ * @author Nicolas Guerrero
  */
 
 public class NumberApplication {
